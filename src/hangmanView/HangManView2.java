@@ -41,8 +41,7 @@ public class HangManView2 extends JFrame implements Observer {
 	private JPanel  panel_Phrase;
 	private JButton btnGuess;
 	private JTextArea textAreaGuesses;
-	private HangManCanvas hangmanCanvas;
-	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary;
+	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary, mntmView1, mntmView2;
 	private HangManModel model = null;
 	private int guesses;
 	
@@ -71,6 +70,16 @@ public class HangManView2 extends JFrame implements Observer {
 		
 		mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
+		
+		JMenu mnView = new JMenu("View");
+		menuBar.add(mnView);
+		
+		mntmView1 = new JMenuItem("View 1");
+		mnView.add(mntmView1);
+		
+		mntmView2 = new JMenuItem("View 2");
+		mnView.add(mntmView2);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -92,9 +101,32 @@ public class HangManView2 extends JFrame implements Observer {
 		contentPane.add(panel_Graphic);
 		panel_Graphic.setLayout(null);
 		
-		hangmanCanvas = new HangManCanvas();
-		hangmanCanvas.setBounds(0, 0, 345, 360);
-		panel_Graphic.add(hangmanCanvas);
+		JTextArea textAreaScore = new JTextArea();
+		textAreaScore.setBounds(144, 11, 191, 100);
+		panel_Graphic.add(textAreaScore);
+		
+		JTextArea textAreaRemainingGuesses = new JTextArea();
+		textAreaRemainingGuesses.setBounds(144, 133, 191, 100);
+		panel_Graphic.add(textAreaRemainingGuesses);
+		
+		JTextArea textAreaRemainingLetters = new JTextArea();
+		textAreaRemainingLetters.setBounds(144, 249, 191, 100);
+		panel_Graphic.add(textAreaRemainingLetters);
+		
+		JLabel lblScore = new JLabel("Score:");
+		lblScore.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblScore.setBounds(39, 49, 58, 21);
+		panel_Graphic.add(lblScore);
+		
+		JLabel lblGuessesRemaining = new JLabel("Remaining Guesses:");
+		lblGuessesRemaining.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblGuessesRemaining.setBounds(10, 178, 131, 21);
+		panel_Graphic.add(lblGuessesRemaining);
+		
+		JLabel lblRemainingLetters = new JLabel("Remaining Letters:");
+		lblRemainingLetters.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblRemainingLetters.setBounds(10, 290, 131, 21);
+		panel_Graphic.add(lblRemainingLetters);
 		
 		JPanel panel_Guess = new JPanel();
 		panel_Guess.setBounds(10, 11, 319, 65);
@@ -164,14 +196,14 @@ public class HangManView2 extends JFrame implements Observer {
 		mntmExit.addActionListener(hangController);
 	}
 	
-	public HangManCanvas getHangmanCanvas(){
+	/*public HangManCanvas getHangmanCanvas(){
 		return hangmanCanvas;
-	}
+	}*/
 	
 	public void updateViewCanvas(){
 		guesses = model.getGuessesRemaining();
 		
-		if(guesses == 10){
+		/*if(guesses == 10){
 			hangmanCanvas.drawStandBase(hangmanCanvas.getGraphics());
 		}
 		else if(guesses == 9){
@@ -211,7 +243,7 @@ public class HangManView2 extends JFrame implements Observer {
 		}
 		else if(guesses == 0){
 			hangmanCanvas.drawEyes(hangmanCanvas.getGraphics());
-		}
+		}*/
 	}
 	@Override
 	public void update(Observable o, Object arg) {
