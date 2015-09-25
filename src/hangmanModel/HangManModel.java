@@ -1,12 +1,8 @@
 package hangmanModel;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
-
-public class HangManModel {
+import java.util.Observable;
+public class HangManModel extends Observable {
 	private WordBank wordBank;
 	private ArrayList<String> lettersGuessed;
 	private String goalWord;
@@ -16,6 +12,15 @@ public class HangManModel {
 
 	public HangManModel() {
 		wordBank = new WordBank();
+		lettersGuessed = new ArrayList<String>();
+		goalWord = wordBank.getRandomWord();
+		lettersRemaining = getNumUniqueLetters(goalWord);
+		guessesRemaining = 11;
+		wordDisplayed = initWordDisplay();
+	}
+	
+	public HangManModel(String filePath) {
+		wordBank = new WordBank(filePath);
 		lettersGuessed = new ArrayList<String>();
 		goalWord = wordBank.getRandomWord();
 		lettersRemaining = getNumUniqueLetters(goalWord);
@@ -39,7 +44,6 @@ public class HangManModel {
 		if (lettersRemaining <= 0) {
 			return true;
 		}
-
 		return false;
 	}
 	
@@ -47,7 +51,6 @@ public class HangManModel {
 		if (guessesRemaining <= 0) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -148,6 +151,8 @@ public class HangManModel {
 	}
 
 	public void guessLetter(String guess) {
+		boolean alreadyGuessed = false;
+		
 		if(guess == null || guess.length() == 0){
 			return;
 		}
@@ -172,8 +177,11 @@ public class HangManModel {
 				// we had a correct guess
 				correctGuess = true;
 
-				// we have one less letter remaining
-				lettersRemaining--;
+				if(!alreadyGuessed){
+					// we have one less letter remaining
+					lettersRemaining--;
+					alreadyGuessed=true;
+				}
 
 				// update the wordDisplayed
 				disp[i + i] = uGuess.charAt(0);
@@ -191,20 +199,8 @@ public class HangManModel {
 			// we we have one less attempt
 			guessesRemaining--;
 		}
-	}
-
-	public static void main(String[] args) throws FileNotFoundException {
-		HangManModel m = new HangManModel();
-		System.out.println(m.getGoalWord());
-		System.out.println(m.getNumUniqueLetters(m.getGoalWord()));
-		System.out.println(m.getWordDisplay() + ", " + m.getGuessesRemaining() + ", " + m.getLettersRemaining());
-		System.out.println(m.getLettersGuessed());
-		m.guessLetter("e");
-		System.out.println(m.getWordDisplay() + ", " + m.getGuessesRemaining() + ", " + m.getLettersRemaining());
-		System.out.println(m.getLettersGuessed());
-		m.guessLetter("s");
-		System.out.println(m.getWordDisplay() + ", " + m.getGuessesRemaining() + ", " + m.getLettersRemaining());
-		System.out.println(m.getLettersGuessed());
-
+		
+		setChanged();
+		notifyObservers();
 	}
 }
