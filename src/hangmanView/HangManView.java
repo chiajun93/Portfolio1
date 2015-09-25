@@ -37,7 +37,7 @@ public class HangManView extends JFrame implements Observer {
 	private JButton btnGuess;
 	private JTextArea textAreaGuesses;
 	private HangManCanvas hangmanCanvas;
-	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary;
+	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary, mntmView1, mntmView2;
 	private HangManModel model = null;
 	private int guesses;
 	
@@ -66,6 +66,15 @@ public class HangManView extends JFrame implements Observer {
 		
 		mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
+		
+		JMenu mnView = new JMenu("View");
+		menuBar.add(mnView);
+		
+		mntmView1 = new JMenuItem("View 1");
+		mnView.add(mntmView1);
+		
+		mntmView2 = new JMenuItem("View 2");
+		mnView.add(mntmView2);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -155,6 +164,14 @@ public class HangManView extends JFrame implements Observer {
 		mntmOpenDictionary.addActionListener(hangController);
 	}
 	
+	public void addView1Controller(HangManController hangController){
+		mntmView1.addActionListener(hangController);
+	}
+	
+	public void addView2Controller(HangManController hangController){
+		mntmView2.addActionListener(hangController);
+	}
+	
 	public void addExitGameController(HangManController hangController){
 		mntmExit.addActionListener(hangController);
 	}
@@ -208,6 +225,7 @@ public class HangManView extends JFrame implements Observer {
 			hangmanCanvas.drawEyes(hangmanCanvas.getGraphics());
 		}
 	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o == model){

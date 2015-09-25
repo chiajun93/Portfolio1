@@ -14,32 +14,29 @@ import hangmanView.HangManView;
 public class HangManController implements ActionListener {
 	private HangManModel model;
 	private HangManView view;
-	
-	public HangManController(HangManModel model, HangManView view){
+
+	public HangManController(HangManModel model, HangManView view) {
 		this.model = model;
 		this.view = view;
 		model.addObserver(view);
 	}
-	
-	public void setUsedLetter(String letter){
+
+	public void setUsedLetter(String letter) {
 		model.guessLetter(letter);
 	}
-	
-	public void updateLetterGuess(){
+
+	public void updateLetterGuess() {
 		ArrayList<String> letterList = model.getLettersGuessed();
 		String usedLetters = letterList.toString();
 		view.getUsedLettersField().setText(usedLetters.substring(1, usedLetters.length() - 1));
 	}
-	
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getActionCommand().equals("New Game")){
+
+		if (e.getActionCommand().equals("New Game")) {
 			newGame();
-		}
-		else if(e.getActionCommand().equals("Open Dictionary")){
+		} else if (e.getActionCommand().equals("Open Dictionary")) {
 			JFileChooser fileChoose = new JFileChooser();
 			fileChoose.setDialogTitle("Choose a new dictionary text file");
 			int returnVal = fileChoose.showOpenDialog(null);
@@ -52,64 +49,73 @@ public class HangManController implements ActionListener {
 				model = new HangManModel(filePath);
 				newGame();
 			}
-			
-			else{
+
+			else {
 				return;
 			}
-		}
-		else if(e.getActionCommand().equals("Exit")){
+		} else if (e.getActionCommand().equals("Exit")) {
 			exitGame();
 		}
-		else{
-			//get the letter that the player guessed
+
+		else if (e.getActionCommand().equals("View 1")) {
+
+		}
+
+		else if (e.getActionCommand().equals("View 2")) {
+
+		}
+
+		else {
+			// get the letter that the player guessed
 			String letter = view.getGuessText().getText();
-			
-			//clear the guess field to make guessing again easier
+
+			// clear the guess field to make guessing again easier
 			view.getGuessText().setText("");
-			
-			//if there was more than one char or wasn't a letter, stop executing
-			if(letter.length() > 1 || !letter.matches("[a-zA-Z]+")){
+
+			// if there was more than one char or wasn't a letter, stop
+			// executing
+			if (letter.length() > 1 || !letter.matches("[a-zA-Z]+")) {
 				return;
 			}
-			
+
 			setUsedLetter(letter);
 			updateLetterGuess();
-			
+
 			view.getWordsDisplayed().setText(model.getWordDisplay());
-			if(model.hasWon()){
+			if (model.hasWon()) {
 				JOptionPane.showMessageDialog(null, "Congrats, you have won!");
 			}
-			
-			else if(model.hasLost()){
+
+			else if (model.hasLost()) {
 				JOptionPane.showMessageDialog(null, "You lost!");
 				view.getWordsDisplayed().setText(model.getGoalWord());
 			}
 		}
 		view.getWordsDisplayed().setText(model.getWordDisplay());
 	}
-	
-	public void initView(){
+
+	public void initView() {
 		view.getWordsDisplayed().setText(model.getWordDisplay());
 	}
-	
+
 	/**
 	 * Starts a new game
 	 */
-	public void newGame(){
-		//set a new goal word
+	public void newGame() {
+		// set a new goal word
 		model.setNewGoalWord();
 		view.getHangmanCanvas().getGraphics().clearRect(0, 0, 345, 360);
 		updateLetterGuess();
 		initView();
 	}
-	
+
 	/**
 	 * Exits the game
 	 */
-	public void exitGame(){
+	public void exitGame() {
 		System.exit(0);
 	}
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -131,6 +137,4 @@ public class HangManController implements ActionListener {
 		});
 	}
 
-
-	
 }
