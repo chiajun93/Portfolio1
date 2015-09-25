@@ -41,7 +41,7 @@ public class HangManView2 extends JFrame implements Observer {
 	private JPanel  panel_Phrase;
 	private JButton btnGuess;
 	private JTextArea textAreaGuesses;
-	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary, mntmView1, mntmView2;
+	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary;
 	private HangManModel model = null;
 	private int guesses;
 	
@@ -70,15 +70,6 @@ public class HangManView2 extends JFrame implements Observer {
 		
 		mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
-		
-		JMenu mnView = new JMenu("View");
-		menuBar.add(mnView);
-		
-		mntmView1 = new JMenuItem("View 1");
-		mnView.add(mntmView1);
-		
-		mntmView2 = new JMenuItem("View 2");
-		mnView.add(mntmView2);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
