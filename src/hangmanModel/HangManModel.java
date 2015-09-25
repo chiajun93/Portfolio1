@@ -9,6 +9,7 @@ public class HangManModel extends Observable {
 	private int lettersRemaining;
 	private int guessesRemaining;
 	private String wordDisplayed;
+	private int score;
 
 	public HangManModel() {
 		wordBank = new WordBank();
@@ -17,6 +18,7 @@ public class HangManModel extends Observable {
 		lettersRemaining = getNumUniqueLetters(goalWord);
 		guessesRemaining = 11;
 		wordDisplayed = initWordDisplay();
+		score = 0;
 	}
 	
 	public HangManModel(String filePath) {
@@ -26,6 +28,7 @@ public class HangManModel extends Observable {
 		lettersRemaining = getNumUniqueLetters(goalWord);
 		guessesRemaining = 11;
 		wordDisplayed = initWordDisplay();
+		score = 0;
 	}
 
 	/**
@@ -134,6 +137,14 @@ public class HangManModel extends Observable {
 	public String getWordDisplay() {
 		return wordDisplayed;
 	}
+	
+	/**
+	 * Get the player's current score
+	 * @return score
+	 */
+	public int getScore(){
+		return score;
+	}
 
 	/**
 	 * Initializes the word displayed as underscores with spaces between them
@@ -150,6 +161,10 @@ public class HangManModel extends Observable {
 		return disp;
 	}
 
+	/**
+	 * Update the word displayed on the screen by reading the user input
+	 * @param guess
+	 */
 	public void guessLetter(String guess) {
 		boolean alreadyGuessed = false;
 		
@@ -195,6 +210,7 @@ public class HangManModel extends Observable {
 				Sdisp += disp[j];
 			}
 			wordDisplayed = Sdisp;
+			score += 500;
 		} else {
 			// we we have one less attempt
 			guessesRemaining--;
