@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
  */
 public class HangManView2 extends JFrame implements Observer {
 	/**
-	 * Declares all required variables.
+	 * Declare all required variables.
 	 */
 	private static final long serialVersionUID = 1L;
 	private JMenuBar menuBar;

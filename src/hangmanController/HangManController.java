@@ -3,22 +3,49 @@ package hangmanController;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 import hangmanModel.HangManModel;
+import hangmanView.HangManCanvas;
 import hangmanView.HangManView;
+import hangmanView.HangManView2;
 
 public class HangManController implements ActionListener {
 	private HangManModel model;
 	private HangManView view;
+	private HangManView2 view2;
+	private static String option;
+	private JTextPane usedLettersField;
+	private JTextArea wordsDisplayed;
+	private HangManCanvas canvas;
+	private JTextField guessText;
 
-	public HangManController(HangManModel model, HangManView view) {
+	public HangManController(HangManModel model, HangManView view) throws FileNotFoundException {
 		this.model = model;
 		this.view = view;
+		usedLettersField = view.getUsedLettersField();
+		wordsDisplayed = view.getWordsDisplayed();
+		canvas = view.getHangmanCanvas();
+		guessText = view.getGuessText();
 		model.addObserver(view);
+	}
+
+	public HangManController(HangManModel model, HangManView2 view) throws FileNotFoundException {
+		this.model = model;
+		this.view2 = view;
+		usedLettersField = view2.getUsedLettersField();
+		wordsDisplayed = view2.getWordsDisplayed();
+		canvas = view2.getHangmanCanvas();
+		guessText = view2.getGuessText();
+		model.addObserver(view2);
 	}
 
 	public void setUsedLetter(String letter) {
@@ -28,7 +55,7 @@ public class HangManController implements ActionListener {
 	public void updateLetterGuess() {
 		ArrayList<String> letterList = model.getLettersGuessed();
 		String usedLetters = letterList.toString();
-		view.getUsedLettersField().setText(usedLetters.substring(1, usedLetters.length() - 1));
+		usedLettersField.setText(usedLetters.substring(1, usedLetters.length() - 1));
 	}
 
 	@Override
@@ -57,20 +84,12 @@ public class HangManController implements ActionListener {
 			exitGame();
 		}
 
-		else if (e.getActionCommand().equals("View 1")) {
-
-		}
-
-		else if (e.getActionCommand().equals("View 2")) {
-
-		}
-
 		else {
 			// get the letter that the player guessed
-			String letter = view.getGuessText().getText();
+			String letter = guessText.getText();
 
 			// clear the guess field to make guessing again easier
-			view.getGuessText().setText("");
+			guessText.setText("");
 
 			// if there was more than one char or wasn't a letter, stop
 			// executing
@@ -81,21 +100,21 @@ public class HangManController implements ActionListener {
 			setUsedLetter(letter);
 			updateLetterGuess();
 
-			view.getWordsDisplayed().setText(model.getWordDisplay());
+			wordsDisplayed.setText(model.getWordDisplay());
 			if (model.hasWon()) {
 				JOptionPane.showMessageDialog(null, "Congrats, you have won!");
 			}
 
 			else if (model.hasLost()) {
 				JOptionPane.showMessageDialog(null, "You lost!");
-				view.getWordsDisplayed().setText(model.getGoalWord());
+				wordsDisplayed.setText(model.getGoalWord());
 			}
 		}
-		view.getWordsDisplayed().setText(model.getWordDisplay());
+		wordsDisplayed.setText(model.getWordDisplay());
 	}
 
 	public void initView() {
-		view.getWordsDisplayed().setText(model.getWordDisplay());
+		wordsDisplayed.setText(model.getWordDisplay());
 	}
 
 	/**
@@ -104,7 +123,7 @@ public class HangManController implements ActionListener {
 	public void newGame() {
 		// set a new goal word
 		model.setNewGoalWord();
-		view.getHangmanCanvas().getGraphics().clearRect(0, 0, 345, 360);
+		canvas.getGraphics().clearRect(0, 0, 345, 360);
 		updateLetterGuess();
 		initView();
 	}
@@ -122,13 +141,29 @@ public class HangManController implements ActionListener {
 				try {
 					HangManModel hangModel = new HangManModel();
 					HangManView hangView = new HangManView(hangModel);
-					HangManController controller = new HangManController(hangModel, hangView);
-					hangView.addBtnGuessController(controller);
-					hangView.addNewGameController(controller);
-					hangView.addOpenDictionaryController(controller);
-					hangView.addExitGameController(controller);
+					HangManView2 hangView2 = new HangManView2(hangModel);
+					HangManController controller;
+					Scanner in = new Scanner(System.in);
+					String option = in.next();
+					in.close();
+					if (option.equals("View1")) {
+						controller = new HangManController(hangModel, hangView);
+						hangView.addBtnGuessController(controller);
+						hangView.addNewGameController(controller);
+						hangView.addOpenDictionaryController(controller);
+						hangView.addExitGameController(controller);
+					}
+
+					else {
+						controller = new HangManController(hangModel, hangView2);
+						hangView2.addBtnGuessController(controller);
+						hangView2.addNewGameController(controller);
+						hangView2.addOpenDictionaryController(controller);
+						hangView2.addExitGameController(controller);
+					}
+
 					controller.initView();
-					
+
 					hangView.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
