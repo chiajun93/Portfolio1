@@ -20,9 +20,6 @@ import hangmanView.HangManView2;
 
 public class HangManController implements ActionListener {
 	private HangManModel model;
-	private HangManView view;
-	private HangManView2 view2;
-	private static String option;
 	private JTextPane usedLettersField;
 	private JTextArea wordsDisplayed;
 	private HangManCanvas canvas;
@@ -30,7 +27,6 @@ public class HangManController implements ActionListener {
 
 	public HangManController(HangManModel model, HangManView view) throws FileNotFoundException {
 		this.model = model;
-		this.view = view;
 		usedLettersField = view.getUsedLettersField();
 		wordsDisplayed = view.getWordsDisplayed();
 		canvas = view.getHangmanCanvas();
@@ -40,12 +36,10 @@ public class HangManController implements ActionListener {
 
 	public HangManController(HangManModel model, HangManView2 view) throws FileNotFoundException {
 		this.model = model;
-		this.view2 = view;
-		usedLettersField = view2.getUsedLettersField();
-		wordsDisplayed = view2.getWordsDisplayed();
-		canvas = view2.getHangmanCanvas();
-		guessText = view2.getGuessText();
-		model.addObserver(view2);
+		usedLettersField = view.getUsedLettersField();
+		wordsDisplayed = view.getWordsDisplayed();
+		guessText = view.getGuessText();
+		model.addObserver(view);
 	}
 
 	public void setUsedLetter(String letter) {
@@ -60,7 +54,6 @@ public class HangManController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getActionCommand().equals("New Game")) {
 			newGame();
 		} else if (e.getActionCommand().equals("Open Dictionary")) {
@@ -138,20 +131,21 @@ public class HangManController implements ActionListener {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				int option = JOptionPane.showOptionDialog(null, "Please choose your HangMan's GUI.", "View Selector", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, "View 1, View 2".split(","), "View 1");
 				try {
 					HangManModel hangModel = new HangManModel();
 					HangManView hangView = new HangManView(hangModel);
 					HangManView2 hangView2 = new HangManView2(hangModel);
 					HangManController controller;
-					Scanner in = new Scanner(System.in);
-					String option = in.next();
-					in.close();
-					if (option.equals("View1")) {
+					if (option == 0) {
 						controller = new HangManController(hangModel, hangView);
 						hangView.addBtnGuessController(controller);
 						hangView.addNewGameController(controller);
 						hangView.addOpenDictionaryController(controller);
 						hangView.addExitGameController(controller);
+						controller.initView();
+
+						hangView.setVisible(true);
 					}
 
 					else {
@@ -160,11 +154,9 @@ public class HangManController implements ActionListener {
 						hangView2.addNewGameController(controller);
 						hangView2.addOpenDictionaryController(controller);
 						hangView2.addExitGameController(controller);
+						controller.initView();
+						hangView2.setVisible(true);
 					}
-
-					controller.initView();
-
-					hangView.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

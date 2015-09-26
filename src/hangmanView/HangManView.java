@@ -28,7 +28,6 @@ public class HangManView extends JFrame implements Observer {
 	/**
 	 * Declares all required variables.
 	 */
-	private static final long serialVersionUID = 1L;
 	private JMenuBar menuBar;
 	private JPanel contentPane;
 	private JTextField textFieldGuess;

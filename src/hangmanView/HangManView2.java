@@ -33,17 +33,15 @@ public class HangManView2 extends JFrame implements Observer {
 	/**
 	 * Declare all required variables.
 	 */
-	private static final long serialVersionUID = 1L;
 	private JMenuBar menuBar;
 	private JPanel contentPane;
 	private JTextField textFieldGuess;
 	private JTextPane usedLetters;
 	private JPanel  panel_Phrase;
 	private JButton btnGuess;
-	private JTextArea textAreaGuesses;
+	private JTextArea textAreaGuesses, textAreaScore, textAreaRemainingGuesses, textAreaRemainingLetters;
 	private JMenuItem mntmNewGame, mntmExit, mntmOpenDictionary;
-	private HangManModel model = null;
-	private int guesses;
+	private HangManModel model;
 	
 	public HangManView2(HangManModel model) throws FileNotFoundException {
 		this.model = model;
@@ -92,15 +90,18 @@ public class HangManView2 extends JFrame implements Observer {
 		contentPane.add(panel_Graphic);
 		panel_Graphic.setLayout(null);
 		
-		JTextArea textAreaScore = new JTextArea();
+		textAreaScore = new JTextArea("0");
+		textAreaScore.setFont(new Font("Monospaced", Font.BOLD, 18));
 		textAreaScore.setBounds(144, 11, 191, 100);
 		panel_Graphic.add(textAreaScore);
 		
-		JTextArea textAreaRemainingGuesses = new JTextArea();
+		textAreaRemainingGuesses = new JTextArea("11");
+		textAreaRemainingGuesses.setFont(new Font("Monospaced", Font.BOLD, 18));
 		textAreaRemainingGuesses.setBounds(144, 133, 191, 100);
 		panel_Graphic.add(textAreaRemainingGuesses);
 		
-		JTextArea textAreaRemainingLetters = new JTextArea();
+		textAreaRemainingLetters = new JTextArea("" + model.getLettersRemaining());
+		textAreaRemainingLetters.setFont(new Font("Monospaced", Font.BOLD, 18));
 		textAreaRemainingLetters.setBounds(144, 249, 191, 100);
 		panel_Graphic.add(textAreaRemainingLetters);
 		
@@ -187,54 +188,14 @@ public class HangManView2 extends JFrame implements Observer {
 		mntmExit.addActionListener(hangController);
 	}
 	
-	/*public HangManCanvas getHangmanCanvas(){
-		return hangmanCanvas;
-	}*/
-	
 	public void updateViewCanvas(){
-		guesses = model.getGuessesRemaining();
+		int guesses = model.getGuessesRemaining();
+		int score = model.getScore();
+		int letterRemain = model.getLettersRemaining();
 		
-		/*if(guesses == 10){
-			hangmanCanvas.drawStandBase(hangmanCanvas.getGraphics());
-		}
-		else if(guesses == 9){
-			hangmanCanvas.drawStandLeft(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 8){
-			hangmanCanvas.drawStandTop(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 7){
-			hangmanCanvas.drawNoose(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 6){
-			hangmanCanvas.drawHead(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 5){
-			hangmanCanvas.drawBody(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 4){
-			hangmanCanvas.drawLegLeft(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 3){
-			hangmanCanvas.drawLegRight(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 2){
-			hangmanCanvas.drawArmLeft(hangmanCanvas.getGraphics());
-			
-		}
-		else if(guesses == 1){
-			hangmanCanvas.drawArmRight(hangmanCanvas.getGraphics());
-		}
-		else if(guesses == 0){
-			hangmanCanvas.drawEyes(hangmanCanvas.getGraphics());
-		}*/
+		textAreaScore.setText("" + score);
+		textAreaRemainingGuesses.setText("" + guesses);
+		textAreaRemainingLetters.setText("" + letterRemain);
 	}
 	@Override
 	public void update(Observable o, Object arg) {
