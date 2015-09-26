@@ -131,7 +131,9 @@ public class HangManController implements ActionListener {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				int option = JOptionPane.showOptionDialog(null, "Please choose your HangMan's GUI.", "View Selector", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, "View 1, View 2".split(","), "View 1");
+				int option = JOptionPane.showOptionDialog(null, "Please choose your HangMan's GUI.", "View Selector",
+						JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, "View 1, View 2".split(","),
+						"View 1");
 				try {
 					HangManModel hangModel = new HangManModel();
 					HangManView hangView = new HangManView(hangModel);
@@ -144,7 +146,6 @@ public class HangManController implements ActionListener {
 						hangView.addOpenDictionaryController(controller);
 						hangView.addExitGameController(controller);
 						controller.initView();
-
 						hangView.setVisible(true);
 					}
 
